@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDo Manager</title>
+  <link rel="stylesheet" href="./oat/oat.min.css">
+  <script src="./oat/oat.min.js" defer></script>
+  <script src="./internal.js" defer></script>
+</head>
+
+<body>
+  <h1>Task Lists</h1>
+  <button id="add-task" class="medium" commandfor="demo-dialog-form" command="show-modal">Add Task</button>
+  <div id="alertBanner" role="alert" style="display: none; padding: 10px; border: 1px solid #ccc;"></div>
+  <dialog id="demo-dialog-form" onclose="addTask(this.returnValue)">
+    <form method="dialog">
+      <header>
+        <h3>Add Task</h3>
+      </header>
+      <div class="vstack">
+        <label>Task detail <input name="taskName" required></label>
+        <ot-taginput id="labels" name="labels">
+          <input placeholder="Add tags ..." maxlength="15" />
+        </ot-taginput>
+      </div>
+      <footer>
+        <button value="cancel" type="button" commandfor="demo-dialog-form" command="close"
+          class="outline">Cancel</button>
+        <button value="save">Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div id="tasksTable" class="table">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>TaskName</th>
+          <th>Labels</th>
+          <th>Status</th>
+          <th>Created On</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+      </tbody>
+    </table>
+  </div>
+  </span>
+</body>
+</html>
