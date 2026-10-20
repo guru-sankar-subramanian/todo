@@ -12,7 +12,7 @@
 
 <body>
   <h1>Task Lists</h1>
-  <button id="add-task" class="medium" commandfor="demo-dialog-form" command="show-modal">Add Task</button>
+  <button id="add-task" accesskey="a" class="medium" commandfor="demo-dialog-form" command="show-modal" title="Press ctrl + option + a for shortcut" data-tooltip-placement="right">Add Task</button>
   <div id="alertBanner" role="alert" style="display: none; padding: 10px; border: 1px solid #ccc;"></div>
   <dialog id="demo-dialog-form" onclose="addTask(this.returnValue)">
     <form method="dialog">
@@ -48,6 +48,38 @@
       </tbody>
     </table>
   </div>
+
+  <dialog id="edit-dialog-form" >
+    <form method="dialog">
+      <header>
+        <h3>Edit Task</h3>
+      </header>
+      <div class="vstack">
+        <input name="id" required hidden>
+        <label>Task detail <input name="taskName" required></label>
+        <label>Tags
+          <ot-taginput id="labels" name="labels">
+            <input placeholder="Add tags ..." maxlength="15" />
+          </ot-taginput>
+        </label>
+        <label>Status
+          <select name="status" id="status">
+            <option value="TO_DO">TO DO</option>
+            <option value="IN_PROGRESS">IN PROGRESS</option>
+            <option value="DONE">DONE</option>
+          </select>
+        </label>
+
+      </div>
+      <footer>
+        <button id="edit-task" value="cancel" type="button" commandfor="edit-dialog-form" command="close"
+          class="outline">Cancel</button>
+        <button value="save" onclick="editTask(this)">Update</button>
+      </footer>
+    </form>
+  </dialog>
+
   </span>
 </body>
+
 </html>

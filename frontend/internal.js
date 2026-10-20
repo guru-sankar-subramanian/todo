@@ -43,14 +43,20 @@ async function fetchTasksDataOnLoad() {
                 labelsHtml = task.labels.map(label => `<span class="badge" data-variant="secondary">${label}</span>`).join("")
             }
 
-            // let statusHtml = ''
-
+            row.id = task.id;
             row.innerHTML = `
-                <td >${task.id}</td>
-                <td><strong>${task.taskName}</strong></td>
-                <td>${labelsHtml}</td>
-                <td><span class="badge" data-variant="${statusVariant}">${task.status}</span></td>
+                <td>${task.id}</td>
+                <td class="data-editable"><strong>${task.taskName}</strong></td>
+                <td id="labels${task.id}" class="labels data-editable">${labelsHtml}</td>
+                <td class="data-editable"><span class="badge" data-variant="${statusVariant}">${task.status}</span></td>
                 <td>${task.createdAt}</td>
+                <td>
+                <button id="buttonId" class="small" data-variant="outline" commandfor="edit-dialog-form" command="show-modal" onclick="openEditTask(event)" 
+                    data-id=${task.id} 
+                    data-task-name=${task.taskName}
+                    data-labels=${task.labels}
+                    data-status=${task.status}>Edit</button>
+                </td>
             `;
             taskstableBody.appendChild(row);
         }
@@ -71,36 +77,17 @@ async function addTask(returnValue) {
     }
     var taskName = document.querySelector("#demo-dialog-form input[name='taskName']").value;
     var tagInputs = document.getElementById("labels").value;
-    // console.log("addTask called with task name: {}", taskName);
-    // console.log("addTask called with labels {}", tagInputs);
-
-    try {
-        const url = "/api/tasks";
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "taskName": taskName,
-                "labels": tagInputs
-            })
-        });
-
-        const data = await response.json();
-        console.log();
-        if (response.status == 201) {
-            console.log('Task saved successfully:', data);
-            showBanner("success")
-        } else {
-            console.log("Task save unsuccessful")
-            showBanner("failed")
-        }
-
-    } catch (error) {
-        console.error('Error saving data:', error);
-    }
+    callCreateOrUpdateApi(null, taskName, tagInputs, null, 'POST')
     fetchTasksDataOnLoad();
+}
+
+function openEditTask(event) {
+    const rowData = event.target.dataset;
+    console.log("rowData >>>>> " + JSON.stringify(rowData));
+    document.querySelector("#edit-dialog-form input[name='id']").value = rowData.id;
+    document.querySelector("#edit-dialog-form input[name='taskName']").value = rowData.taskName;
+    document.querySelector("#edit-dialog-form ot-taginput").value = rowData.labels.split(",");
+    document.querySelector("#edit-dialog-form input[name='status']").value = rowData.status;
 }
 
 function showBanner(result) {
@@ -119,4 +106,55 @@ function showBanner(result) {
         alertBanner.style.display = 'none';
     }, 1000);
 
+}
+
+
+function editTask(event) {
+    var id = document.querySelector("#edit-dialog-form input[name='id']").value;
+    var taskName = document.querySelector("#edit-dialog-form input[name='taskName']").value;
+    var tagInputs = document.querySelector("#edit-dialog-form ot-taginput").value
+    var status = document.querySelector("#edit-dialog-form select").value
+    callCreateOrUpdateApi(id, taskName, tagInputs, status, 'PUT');
+    fetchTasksDataOnLoad();
+}
+
+async function callCreateOrUpdateApi(id, taskName, tagInputs, statusValue, method) {
+    var reqBody = "";
+    if (method == 'POST') {
+        reqBody = JSON.stringify({
+            "taskName": taskName,
+            "labels": tagInputs
+        })
+    } else {
+        reqBody = JSON.stringify({
+            "id": Number(id),
+            "taskName": taskName,
+            "labels": tagInputs,
+            "status": statusValue
+        })
+    }
+
+    try {
+        const url = "/api/tasks";
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: reqBody
+        });
+
+        const data = await response.json();
+        console.log(method, " call triggered :", reqBody);
+        if (response.status == 201) {
+            console.log('Task saved successfully:', data);
+            showBanner("success")
+        } else {
+            console.log("Task save unsuccessful")
+            showBanner("failed")
+        }
+
+    } catch (error) {
+        console.error('Error saving data:', error);
+    }
 }
