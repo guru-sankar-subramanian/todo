@@ -13,7 +13,7 @@ Everything ships as one self-contained app: the UI is embedded in the binary.
 
 ## Install (from a zip)
 
-1. Unzip `TodoManager-<version>.zip`.
+1. Download and Unzip `TodoManager-<version>.zip` from [Releases](https://github.com/guru-sankar-subramanian/todo/releases).
 2. Drag `TodoManager.app` into `/Applications`.
 3. Open it for the first time (see "First launch" below).
 4. Look for the icon in the menu bar, click it, and choose **Open Todo Manager**.
