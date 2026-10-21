@@ -53,7 +53,7 @@ async function fetchTasksDataOnLoad() {
                 <td>
                 <button id="buttonId" class="small" data-variant="outline" commandfor="edit-dialog-form" command="show-modal" onclick="openEditTask(event)" 
                     data-id=${task.id} 
-                    data-task-name=${task.taskName}
+                    data-task-name="${task.taskName}"
                     data-labels=${task.labels}
                     data-status=${task.status}>Edit</button>
                 </td>
@@ -101,7 +101,6 @@ function showBanner(result) {
         alertBanner.setAttribute('data-variant', 'success');
     }
 
-
     setTimeout(() => {
         alertBanner.style.display = 'none';
     }, 1000);
@@ -145,6 +144,7 @@ async function callCreateOrUpdateApi(id, taskName, tagInputs, statusValue, metho
         });
 
         const data = await response.json();
+        await delay(500)
         console.log(method, " call triggered :", reqBody);
         if (response.status == 201) {
             console.log('Task saved successfully:', data);
