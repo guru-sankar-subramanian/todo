@@ -30,6 +30,9 @@ func init() {
 
 func main() {
 	initialize()
+	database := db.StartDb(DATA_DIRECTORY)
+	defer database.Db.Close()
+
 	runTray("http://" + DEFAULT_ADDR) // blocks here
 }
 
@@ -40,13 +43,10 @@ func initialize() {
 	}
 
 	setupDefaultConfigs()
-	startDbAndServer()
+	startHttpServer()
 }
 
-func startDbAndServer() {
-	database := db.StartDb(DATA_DIRECTORY)
-	defer database.Db.Close()
-
+func startHttpServer() {
 	srv := &http.Server{Addr: DEFAULT_ADDR, Handler: server.Init(isProd, embeddedUI)}
 	go func() {
 		log.Printf("listening on http://%s", DEFAULT_ADDR)

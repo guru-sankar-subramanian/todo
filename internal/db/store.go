@@ -86,7 +86,7 @@ func InsertTask(taskName string, labels []string) (lastInsertedId int64) {
 	}
 
 	log.Println(string(labels_))
-	out, err := database.Db.Exec(sqlStmt, taskName, string(labels_), "TODO", time.Now().UTC())
+	out, err := database.Db.Exec(sqlStmt, taskName, string(labels_), "TO_DO", time.Now().UTC())
 	if err != nil {
 		log.Printf("%q: %s\n", err, sqlStmt)
 		return

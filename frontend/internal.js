@@ -25,10 +25,9 @@ async function fetchTasksDataOnLoad() {
             throw new Error(`Response status: ${response.status}`);
         }
         const result = await response.json();
-        await delay(1000)
+        // await delay(1000)
 
         for (const task of result) {
-            console.log(task);
             const row = document.createElement('tr');
             let statusVariant = "warning"; // Default variant
             if (task.status === "TODO") {
@@ -51,11 +50,11 @@ async function fetchTasksDataOnLoad() {
                 <td class="data-editable"><span class="badge" data-variant="${statusVariant}">${task.status}</span></td>
                 <td>${task.createdAt}</td>
                 <td>
-                <button id="buttonId" class="small" data-variant="outline" commandfor="edit-dialog-form" command="show-modal" onclick="openEditTask(event)" 
-                    data-id=${task.id} 
-                    data-task-name="${task.taskName}"
-                    data-labels=${task.labels}
-                    data-status=${task.status}>Edit</button>
+                    <button id="buttonId" class="small" data-variant="outline" commandfor="edit-dialog-form" command="show-modal" onclick="openEditTask(event)" 
+                        data-id=${task.id} 
+                        data-task-name="${task.taskName}"
+                        data-labels=${task.labels}
+                        data-status=${task.status}>Edit</button>
                 </td>
             `;
             taskstableBody.appendChild(row);
@@ -77,8 +76,8 @@ async function addTask(returnValue) {
     }
     var taskName = document.querySelector("#demo-dialog-form input[name='taskName']").value;
     var tagInputs = document.getElementById("labels").value;
-    callCreateOrUpdateApi(null, taskName, tagInputs, null, 'POST')
-    fetchTasksDataOnLoad();
+    await callCreateOrUpdateApi(null, taskName, tagInputs, null, 'POST')
+    await fetchTasksDataOnLoad();
 }
 
 function openEditTask(event) {
@@ -87,7 +86,7 @@ function openEditTask(event) {
     document.querySelector("#edit-dialog-form input[name='id']").value = rowData.id;
     document.querySelector("#edit-dialog-form input[name='taskName']").value = rowData.taskName;
     document.querySelector("#edit-dialog-form ot-taginput").value = rowData.labels.split(",");
-    document.querySelector("#edit-dialog-form input[name='status']").value = rowData.status;
+    document.querySelector("#edit-dialog-form select[name='status']").value = rowData.status;
 }
 
 function showBanner(result) {
@@ -108,13 +107,13 @@ function showBanner(result) {
 }
 
 
-function editTask(event) {
+async function editTask(event) {
     var id = document.querySelector("#edit-dialog-form input[name='id']").value;
     var taskName = document.querySelector("#edit-dialog-form input[name='taskName']").value;
     var tagInputs = document.querySelector("#edit-dialog-form ot-taginput").value
     var status = document.querySelector("#edit-dialog-form select").value
-    callCreateOrUpdateApi(id, taskName, tagInputs, status, 'PUT');
-    fetchTasksDataOnLoad();
+    await callCreateOrUpdateApi(id, taskName, tagInputs, status, 'PUT');
+    await fetchTasksDataOnLoad();
 }
 
 async function callCreateOrUpdateApi(id, taskName, tagInputs, statusValue, method) {
@@ -144,7 +143,7 @@ async function callCreateOrUpdateApi(id, taskName, tagInputs, statusValue, metho
         });
 
         const data = await response.json();
-        await delay(500)
+        // await delay(1000)
         console.log(method, " call triggered :", reqBody);
         if (response.status == 201) {
             console.log('Task saved successfully:', data);
