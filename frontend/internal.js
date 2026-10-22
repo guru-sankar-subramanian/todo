@@ -30,7 +30,7 @@ async function fetchTasksDataOnLoad() {
         for (const task of result) {
             const row = document.createElement('tr');
             let statusVariant = "warning"; // Default variant
-            if (task.status === "TODO") {
+            if (task.status === "TO_DO") {
                 statusVariant = "danger";
             } else if (task.status === "DONE") {
                 statusVariant = "success";

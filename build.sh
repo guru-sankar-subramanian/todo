@@ -16,7 +16,7 @@ for tool in go codesign ditto shasum plutil; do
   command -v "$tool" >/dev/null || { echo "❌ missing tool: $tool"; exit 1; }
 done
 [ -d frontend ]        || { echo "❌ ./frontend not found (go:embed needs it)"; exit 1; }
-[ -f assets/icon.png ] || { echo "❌ ./assets/icon.png not found (tray icon)"; exit 1; }
+[ -f assets/icons8.png ] || { echo "❌ ./assets/icons8.png not found (tray icon)"; exit 1; }
 
 # --- build -------------------------------------------------------------------
 rm -rf build

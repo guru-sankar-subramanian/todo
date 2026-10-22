@@ -93,8 +93,6 @@ func setupDefaultConfigs() {
 	} else {
 		DEFAULT_ADDR = "127.0.0.1:8422"
 	}
-
-	DATA_DIRECTORY = defaultDataDir()
 }
 
 func defaultDataDir() string {
